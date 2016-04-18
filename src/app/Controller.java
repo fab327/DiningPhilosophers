@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -25,6 +26,9 @@ public class Controller implements Initializable {
     private ComboBox<Integer> hungryTimeSelector;
     @FXML
     private ComboBox<Integer> eatingTimeSelector;
+
+    @FXML
+    private TextArea logTextArea;
 
     //Philosophers
     @FXML
@@ -86,16 +90,16 @@ public class Controller implements Initializable {
         kantImgs[2] = new Image(getClass().getResourceAsStream("img/Kant-Eating.png"));
 
         for (int i = 0; i < 5; i++) {
-            chopsticks[i] = new Chopstick(i);
+            chopsticks[i] = new Chopstick(i, logTextArea);
         }
         assignChopstickToItsView();
 
         //Create philosophers
-        philosophers[0] = new Philosopher(chopsticks[0], chopsticks[1], 0, "aristotle", aristotle, aristotleImgs[0], aristotleImgs[1], aristotleImgs[2]);
-        philosophers[1] = new Philosopher(chopsticks[1], chopsticks[2], 1, "buddha", buddha, buddhaImgs[0], buddhaImgs[1], buddhaImgs[2]);
-        philosophers[2] = new Philosopher(chopsticks[2], chopsticks[3], 2, "russel", russell, russellImgs[0], russellImgs[1], russellImgs[2]);
-        philosophers[3] = new Philosopher(chopsticks[3], chopsticks[4], 3, "marx", marx, marxImgs[0], marxImgs[1], marxImgs[2]);
-        philosophers[4] = new Philosopher(chopsticks[4], chopsticks[0], 4, "kant", kant, kantImgs[0], kantImgs[1], kantImgs[2]);
+        philosophers[0] = new Philosopher(chopsticks[0], chopsticks[1], 0, "aristotle", aristotle, aristotleImgs[0], aristotleImgs[1], aristotleImgs[2], logTextArea);
+        philosophers[1] = new Philosopher(chopsticks[1], chopsticks[2], 1, "buddha", buddha, buddhaImgs[0], buddhaImgs[1], buddhaImgs[2], logTextArea);
+        philosophers[2] = new Philosopher(chopsticks[2], chopsticks[3], 2, "russel", russell, russellImgs[0], russellImgs[1], russellImgs[2], logTextArea);
+        philosophers[3] = new Philosopher(chopsticks[3], chopsticks[4], 3, "marx", marx, marxImgs[0], marxImgs[1], marxImgs[2], logTextArea);
+        philosophers[4] = new Philosopher(chopsticks[4], chopsticks[0], 4, "kant", kant, kantImgs[0], kantImgs[1], kantImgs[2], logTextArea);
     }
 
     private ObservableList<Integer> generateSelectionValues(int lowerBound, int higherBound) {
@@ -109,6 +113,7 @@ public class Controller implements Initializable {
 
     public void startAction(ActionEvent actionEvent) {
         System.out.println("Started Simulation");
+        logTextArea.appendText("Started Simulation \n");
         running = true;
 
         overrideDefaultValuesWhereNecessary();
@@ -119,6 +124,8 @@ public class Controller implements Initializable {
     }
 
     public void stopAction(ActionEvent actionEvent) {
+        System.out.println("Stopped Simulation");
+        logTextArea.appendText("Stopped Simulation, wait for each philosopher to finish \n");
         running = false;
     }
 

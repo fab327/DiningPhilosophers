@@ -1,6 +1,7 @@
 package app.Model;
 
 import javafx.application.Platform;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 
 import java.util.concurrent.locks.ReentrantLock;
@@ -14,10 +15,11 @@ public class Chopstick extends ReentrantLock {
     private boolean taken;
 
     private ImageView chopstickView;
+    private TextArea loggingConsole;
 
-
-    public Chopstick(int id) {
+    public Chopstick(int id, TextArea loggingConsole) {
         this.id = id;
+        this.loggingConsole = loggingConsole;
     }
 
     public void setChopstickView(ImageView chopstickView) {
@@ -31,7 +33,10 @@ public class Chopstick extends ReentrantLock {
     boolean pick(Philosopher philosopher) {
         if (tryLock()) {
             taken = true;
-            Platform.runLater(()-> chopstickView.setVisible(false));
+            Platform.runLater(()-> {
+                chopstickView.setVisible(false);
+                loggingConsole.appendText(philosopher + " picked up chopstick #" + id + "\n");
+            });
             System.out.println(philosopher + " picked up chopstick #" + id);
             return true;
         }
@@ -42,7 +47,10 @@ public class Chopstick extends ReentrantLock {
         if (isHeldByCurrentThread()) {
             unlock();
             taken = false;
-            Platform.runLater(()-> chopstickView.setVisible(true));
+            Platform.runLater(()-> {
+                chopstickView.setVisible(true);
+                loggingConsole.appendText(philosopher + " dropped chopstick #" + id + "\n");
+            });
             System.out.println(philosopher + " dropped chopstick #" + id);
             return true;
         }
