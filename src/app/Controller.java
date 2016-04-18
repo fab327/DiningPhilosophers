@@ -2,9 +2,13 @@ package app;
 
 import app.Model.Chopstick;
 import app.Model.Philosopher;
+import app.Utilities.Utils;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -14,6 +18,13 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
 
     public static boolean running;
+
+    @FXML
+    private ComboBox<Integer> thinkingTimeSelector;
+    @FXML
+    private ComboBox<Integer> hungryTimeSelector;
+    @FXML
+    private ComboBox<Integer> eatingTimeSelector;
 
     //Philosophers
     @FXML
@@ -50,6 +61,10 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        thinkingTimeSelector.setItems(generateSelectionValues(5, 15));
+        hungryTimeSelector.setItems(generateSelectionValues(5, 15));
+        eatingTimeSelector.setItems(generateSelectionValues(10, 20));
+
         aristotleImgs[0] = new Image(getClass().getResourceAsStream("img/Aristotle-Thinking.png"));
         aristotleImgs[1] = new Image(getClass().getResourceAsStream("img/Aristotle-Hungry.png"));
         aristotleImgs[2] = new Image(getClass().getResourceAsStream("img/Aristotle-Eating.png"));
@@ -83,9 +98,20 @@ public class Controller implements Initializable {
         philosophers[4] = new Philosopher(chopsticks[4], chopsticks[0], 4, "kant", kant, kantImgs[0], kantImgs[1], kantImgs[2]);
     }
 
+    private ObservableList<Integer> generateSelectionValues(int lowerBound, int higherBound) {
+        ObservableList<Integer> options = FXCollections.observableArrayList();
+        for (int i = lowerBound; i <= higherBound; i++) {
+            options.add(i);
+        }
+
+        return options;
+    }
+
     public void startAction(ActionEvent actionEvent) {
         System.out.println("Started Simulation");
         running = true;
+
+        overrideDefaultValuesWhereNecessary();
 
         for (Philosopher p : philosophers) {
             new Thread(p).start();
@@ -102,6 +128,25 @@ public class Controller implements Initializable {
         chopsticks[2].setChopstickView(chopstick2);
         chopsticks[3].setChopstickView(chopstick3);
         chopsticks[4].setChopstickView(chopstick4);
+    }
+
+    private void overrideDefaultValuesWhereNecessary() {
+        Object thinking = thinkingTimeSelector.getValue();
+        Object hungry = hungryTimeSelector.getValue();
+        Object eating = eatingTimeSelector.getValue();
+
+        if (thinking != null) {
+            int thinkingValue = Integer.parseInt(thinking.toString());
+            Utils.setThinkingBoundary(thinkingValue);
+        }
+        if (hungry != null) {
+            int hungryValue = Integer.parseInt(hungry.toString());
+            Utils.setHungryBoundary(hungryValue);
+        }
+        if (eating != null) {
+            int eatingValue = Integer.parseInt(eating.toString());
+            Utils.setEatingBoundary(eatingValue);
+        }
     }
 
 }

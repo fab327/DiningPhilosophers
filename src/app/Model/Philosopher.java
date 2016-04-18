@@ -52,7 +52,7 @@ public class Philosopher implements Runnable {
                 System.out.println(name + " is thinking...");
                 Platform.runLater(() -> headView.setImage(thinkingImg));
 
-                Thread.sleep(Utils.RandIntThink());
+                Thread.sleep(Utils.randomIntThink());
                 state = State.HUNGRY;
             }
         } catch (InterruptedException e) {
@@ -66,7 +66,7 @@ public class Philosopher implements Runnable {
                 System.out.println(name + " is hungry...");
                 Platform.runLater(() -> headView.setImage(hungryImg));
 
-                Thread.sleep(Utils.RandIntHungry());
+                Thread.sleep(Utils.randomIntHungry());
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -85,7 +85,7 @@ public class Philosopher implements Runnable {
 
                         Platform.runLater(() -> headView.setImage(eatingImg));
 
-                        Thread.sleep(Utils.RandIntEat());
+                        Thread.sleep(Utils.randomIntEat());
 
                         //Go back to Thinking state
                         Platform.runLater(() -> headView.setImage(thinkingImg));
