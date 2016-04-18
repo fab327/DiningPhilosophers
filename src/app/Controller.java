@@ -3,6 +3,7 @@ package app;
 import app.Model.Chopstick;
 import app.Model.Philosopher;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,23 +16,33 @@ public class Controller implements Initializable {
     public static boolean running;
 
     //Philosophers
-    public ImageView aristotle;
+    @FXML
+    private ImageView aristotle;
     private Image[] aristotleImgs = new Image[3];
-    public ImageView buddha;
+    @FXML
+    private ImageView buddha;
     private Image[] buddhaImgs = new Image[3];
-    public ImageView russell;
+    @FXML
+    private ImageView russell;
     private Image[] russellImgs = new Image[3];
-    public ImageView marx;
+    @FXML
+    private ImageView marx;
     private Image[] marxImgs = new Image[3];
-    public ImageView kant;
+    @FXML
+    private ImageView kant;
     private Image[] kantImgs = new Image[3];
 
     //Chopsticks
-    public ImageView chopstick1;
-    public ImageView chopstick2;
-    public ImageView chopstick3;
-    public ImageView chopstick4;
-    public ImageView chopstick5;
+    @FXML
+    private ImageView chopstick1;
+    @FXML
+    private ImageView chopstick2;
+    @FXML
+    private ImageView chopstick3;
+    @FXML
+    private ImageView chopstick4;
+    @FXML
+    private ImageView chopstick5;
 
     //Generate our philosophers and chopsticks
     private Philosopher[] philosophers = new Philosopher[5];

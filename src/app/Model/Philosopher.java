@@ -104,6 +104,6 @@ public class Philosopher implements Runnable {
 
     @Override
     public String toString() {
-        return "Philosopher " + id + " (" + name + ")";
+        return "Philosopher_" + id + "_" + name;
     }
 }
