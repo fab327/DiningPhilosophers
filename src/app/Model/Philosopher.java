@@ -22,11 +22,8 @@ public class Philosopher implements Runnable {
     private Image hungryImg;
     private Image eatingImg;
 
-    private ImageView leftChopstickView;
-    private ImageView rightChopstickView;
-
     public Philosopher(Chopstick leftChopstick, Chopstick rightChopstick, int id, String name, ImageView headView,
-                       Image thinkingImg, Image hungryImg, Image eatingImg, ImageView leftChopstickView, ImageView rightChopstickView) {
+                       Image thinkingImg, Image hungryImg, Image eatingImg) {
         this.leftChopstick = leftChopstick;
         this.rightChopstick = rightChopstick;
         this.id = id;
@@ -35,8 +32,6 @@ public class Philosopher implements Runnable {
         this.thinkingImg = thinkingImg;
         this.hungryImg = hungryImg;
         this.eatingImg = eatingImg;
-        this.leftChopstickView = leftChopstickView;
-        this.rightChopstickView = rightChopstickView;
 
         state = State.THINKING;
     }
@@ -57,7 +52,7 @@ public class Philosopher implements Runnable {
                 System.out.println(name + " is thinking...");
                 Platform.runLater(() -> headView.setImage(thinkingImg));
 
-                Thread.sleep(Utils.RandIntEatAndThink());
+                Thread.sleep(Utils.RandIntThink());
                 state = State.HUNGRY;
             }
         } catch (InterruptedException e) {
@@ -88,20 +83,12 @@ public class Philosopher implements Runnable {
                         System.out.println(name + " is eating...");
                         state = State.EATING;
 
-                        Platform.runLater(() -> {
-                            headView.setImage(eatingImg);
-                            leftChopstickView.setVisible(false);
-                            rightChopstickView.setVisible(false);
-                        });
+                        Platform.runLater(() -> headView.setImage(eatingImg));
 
-                        Thread.sleep(Utils.RandIntEatAndThink());
+                        Thread.sleep(Utils.RandIntEat());
 
                         //Go back to Thinking state
-                        Platform.runLater(() -> {
-                            headView.setImage(thinkingImg);
-                            leftChopstickView.setVisible(true);
-                            rightChopstickView.setVisible(true);
-                        });
+                        Platform.runLater(() -> headView.setImage(thinkingImg));
                         state = State.THINKING;
                     } catch (InterruptedException e) {
                         e.printStackTrace();

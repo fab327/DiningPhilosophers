@@ -62,17 +62,18 @@ public class Controller implements Initializable {
         for (int i = 0; i < 5; i++) {
             chopsticks[i] = new Chopstick(i);
         }
+        assignChopstickToItsView();
 
-        //Assign the forks that each philosopher can take at creation
-        philosophers[0] = new Philosopher(chopsticks[0], chopsticks[1], 0, "aristotle", aristotle, aristotleImgs[0], aristotleImgs[1], aristotleImgs[2], chopstick5, chopstick1);
-        philosophers[1] = new Philosopher(chopsticks[1], chopsticks[2], 1, "buddha", buddha, buddhaImgs[0], buddhaImgs[1], buddhaImgs[2], chopstick1, chopstick2);
-        philosophers[2] = new Philosopher(chopsticks[2], chopsticks[3], 2, "russel", russell, russellImgs[0], russellImgs[1], russellImgs[2], chopstick2, chopstick3);
-        philosophers[3] = new Philosopher(chopsticks[3], chopsticks[4], 3, "marx", marx, marxImgs[0], marxImgs[1], marxImgs[2], chopstick3, chopstick4);
-        philosophers[4] = new Philosopher(chopsticks[4], chopsticks[0], 4, "kant", kant, kantImgs[0], kantImgs[1], kantImgs[2], chopstick4, chopstick5);
+        //Create philosophers
+        philosophers[0] = new Philosopher(chopsticks[0], chopsticks[1], 0, "aristotle", aristotle, aristotleImgs[0], aristotleImgs[1], aristotleImgs[2]);
+        philosophers[1] = new Philosopher(chopsticks[1], chopsticks[2], 1, "buddha", buddha, buddhaImgs[0], buddhaImgs[1], buddhaImgs[2]);
+        philosophers[2] = new Philosopher(chopsticks[2], chopsticks[3], 2, "russel", russell, russellImgs[0], russellImgs[1], russellImgs[2]);
+        philosophers[3] = new Philosopher(chopsticks[3], chopsticks[4], 3, "marx", marx, marxImgs[0], marxImgs[1], marxImgs[2]);
+        philosophers[4] = new Philosopher(chopsticks[4], chopsticks[0], 4, "kant", kant, kantImgs[0], kantImgs[1], kantImgs[2]);
     }
 
     public void startAction(ActionEvent actionEvent) {
-        System.out.println("Started");
+        System.out.println("Started Simulation");
         running = true;
 
         for (Philosopher p : philosophers) {
@@ -82,6 +83,14 @@ public class Controller implements Initializable {
 
     public void stopAction(ActionEvent actionEvent) {
         running = false;
+    }
+
+    private void assignChopstickToItsView() {
+        chopsticks[0].setChopstickView(chopstick5);
+        chopsticks[1].setChopstickView(chopstick1);
+        chopsticks[2].setChopstickView(chopstick2);
+        chopsticks[3].setChopstickView(chopstick3);
+        chopsticks[4].setChopstickView(chopstick4);
     }
 
 }
