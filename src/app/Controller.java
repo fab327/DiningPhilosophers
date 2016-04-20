@@ -2,6 +2,7 @@ package app;
 
 import app.Model.Chopstick;
 import app.Model.Philosopher;
+import app.Utilities.Timer;
 import app.Utilities.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,7 +10,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -29,6 +33,9 @@ public class Controller implements Initializable {
 
     @FXML
     private TextArea logTextArea;
+
+    @FXML
+    private TableView tableAvgs;
 
     //Philosophers
     @FXML
@@ -63,6 +70,9 @@ public class Controller implements Initializable {
     private Philosopher[] philosophers = new Philosopher[5];
     private Chopstick[] chopsticks = new Chopstick[5];
 
+    //List with average execution times
+    ObservableList<Timer> timers = FXCollections.observableArrayList();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         thinkingTimeSelector.setItems(generateSelectionValues(5, 15));
@@ -94,12 +104,32 @@ public class Controller implements Initializable {
         }
         assignChopstickToItsView();
 
+        tableAvgs.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        //create columns for average execution time
+        TableColumn<Timer, Double> avgThinkingColumn = new TableColumn<Timer, Double>("Avg. Thinking");
+        avgThinkingColumn.setCellValueFactory(new PropertyValueFactory("averageThinkingTime"));
+
+        TableColumn<Timer, Double> avgEatingColumn = new TableColumn<Timer, Double>("Avg. Eating");
+        avgEatingColumn.setCellValueFactory(new PropertyValueFactory("averageEatingTime"));
+
+        TableColumn<Timer, Double> avgHungerColumn = new TableColumn<Timer, Double>("Avg. Hungry");
+        avgHungerColumn.setCellValueFactory(new PropertyValueFactory("averageHungryTime"));
+
+        tableAvgs.getColumns().setAll(avgThinkingColumn, avgEatingColumn, avgHungerColumn);
+        tableAvgs.setItems(timers);
+
+        timers.add(0, new Timer());
+        timers.add(1, new Timer());
+        timers.add(2, new Timer());
+        timers.add(3, new Timer());
+        timers.add(4, new Timer());
+
         //Create philosophers
-        philosophers[0] = new Philosopher(chopsticks[0], chopsticks[1], 0, "aristotle", aristotle, aristotleImgs[0], aristotleImgs[1], aristotleImgs[2], logTextArea);
-        philosophers[1] = new Philosopher(chopsticks[1], chopsticks[2], 1, "buddha", buddha, buddhaImgs[0], buddhaImgs[1], buddhaImgs[2], logTextArea);
-        philosophers[2] = new Philosopher(chopsticks[2], chopsticks[3], 2, "russel", russell, russellImgs[0], russellImgs[1], russellImgs[2], logTextArea);
-        philosophers[3] = new Philosopher(chopsticks[3], chopsticks[4], 3, "marx", marx, marxImgs[0], marxImgs[1], marxImgs[2], logTextArea);
-        philosophers[4] = new Philosopher(chopsticks[4], chopsticks[0], 4, "kant", kant, kantImgs[0], kantImgs[1], kantImgs[2], logTextArea);
+        philosophers[0] = new Philosopher(chopsticks[0], chopsticks[1], 0, "aristotle", aristotle, aristotleImgs[0], aristotleImgs[1], aristotleImgs[2], logTextArea, new Timer(), timers);
+        philosophers[1] = new Philosopher(chopsticks[1], chopsticks[2], 1, "buddha", buddha, buddhaImgs[0], buddhaImgs[1], buddhaImgs[2], logTextArea, new Timer(), timers);
+        philosophers[2] = new Philosopher(chopsticks[2], chopsticks[3], 2, "russel", russell, russellImgs[0], russellImgs[1], russellImgs[2], logTextArea, new Timer(), timers);
+        philosophers[3] = new Philosopher(chopsticks[3], chopsticks[4], 3, "marx", marx, marxImgs[0], marxImgs[1], marxImgs[2], logTextArea, new Timer(), timers);
+        philosophers[4] = new Philosopher(chopsticks[4], chopsticks[0], 4, "kant", kant, kantImgs[0], kantImgs[1], kantImgs[2], logTextArea, new Timer(), timers);
     }
 
     private ObservableList<Integer> generateSelectionValues(int lowerBound, int higherBound) {
