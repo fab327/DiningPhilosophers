@@ -97,9 +97,9 @@
       <TableView fx:id="tableAvgs" layoutX="836.0" layoutY="339.0" prefHeight="308.0" prefWidth="456.0">
          <columns>
             <TableColumn prefWidth="111.0" text="Philosopher" />
-            <TableColumn prefWidth="107.0" text="THINKING" />
-            <TableColumn prefWidth="114.0" text="EATING" />
-            <TableColumn prefWidth="123.0" text="HUNGRY" />
+            <TableColumn prefWidth="107.0" text="Avg. Thinking" />
+            <TableColumn prefWidth="114.0" text="Avg. Eating" />
+            <TableColumn prefWidth="123.0" text="Avg. Hungry" />
          </columns>
       </TableView>
    </children>

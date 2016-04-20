@@ -2,12 +2,15 @@ package app.Utilities;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  * Created by Marcel on 4/19/2016.
  */
 
 public class Timer {
+    private SimpleStringProperty philosopherName;
     private long eatingTime;
     private long thinkingTime;
     private long hungryTime;
@@ -17,6 +20,22 @@ public class Timer {
     private long eatingCounter;
     private long thinkingCounter;
     private long hungryCounter;
+
+    public Timer() {
+
+    }
+
+    public Timer(String philosopherName) {
+        philosopherNameProperty().setValue(philosopherName);
+    }
+
+    public SimpleStringProperty philosopherNameProperty() {
+        if (philosopherName == null) {
+            philosopherName = new SimpleStringProperty(this, "philosopherName");
+        }
+
+        return philosopherName;
+    }
 
     public void addEatingTime(long time) {
         this.eatingTime += time;
@@ -34,24 +53,12 @@ public class Timer {
         return eatingTime;
     }
 
-    public void setEatingTime(long eatingTime) {
-        this.eatingTime = eatingTime;
-    }
-
     public long getThinkingTime() {
         return thinkingTime;
     }
 
-    public void setThinkingTime(long thinkingTime) {
-        this.thinkingTime = thinkingTime;
-    }
-
     public long getHungryTime() {
         return hungryTime;
-    }
-
-    public void setHungryTime(long hungryTime) {
-        this.hungryTime = hungryTime;
     }
 
     public long getEatingCounter() {

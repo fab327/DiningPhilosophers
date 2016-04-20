@@ -104,8 +104,10 @@ public class Controller implements Initializable {
         }
         assignChopstickToItsView();
 
-        tableAvgs.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        //create columns for average execution time
+        //create columns for averages
+        TableColumn<Timer, String> philosopherColumn = new TableColumn<Timer, String>("Philosopher");
+        philosopherColumn.setCellValueFactory(new PropertyValueFactory("philosopherName"));
+
         TableColumn<Timer, Double> avgThinkingColumn = new TableColumn<Timer, Double>("Avg. Thinking");
         avgThinkingColumn.setCellValueFactory(new PropertyValueFactory("averageThinkingTime"));
 
@@ -115,14 +117,14 @@ public class Controller implements Initializable {
         TableColumn<Timer, Double> avgHungerColumn = new TableColumn<Timer, Double>("Avg. Hungry");
         avgHungerColumn.setCellValueFactory(new PropertyValueFactory("averageHungryTime"));
 
-        tableAvgs.getColumns().setAll(avgThinkingColumn, avgEatingColumn, avgHungerColumn);
+        tableAvgs.getColumns().setAll(philosopherColumn, avgThinkingColumn, avgEatingColumn, avgHungerColumn);
         tableAvgs.setItems(timers);
 
-        timers.add(0, new Timer());
-        timers.add(1, new Timer());
-        timers.add(2, new Timer());
-        timers.add(3, new Timer());
-        timers.add(4, new Timer());
+        timers.add(0, new Timer("Aristotle"));
+        timers.add(1, new Timer("Buddha"));
+        timers.add(2, new Timer("Russel"));
+        timers.add(3, new Timer("Marx"));
+        timers.add(4, new Timer("Kant"));
 
         //Create philosophers
         philosophers[0] = new Philosopher(chopsticks[0], chopsticks[1], 0, "aristotle", aristotle, aristotleImgs[0], aristotleImgs[1], aristotleImgs[2], logTextArea, new Timer(), timers);
