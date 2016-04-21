@@ -57,13 +57,13 @@ public class Philosopher implements Runnable {
             eat();
 
             if (timer.getEatingCounter() != 0) {
-                timers.get(id).setAverageEatingTime(new Double((timer.getEatingTime() / timer.getEatingCounter()) / 1000));
+                timers.get(id).setAverageEatingTime(new Double((double)timer.getEatingTime() / timer.getEatingCounter()) / 1000);
             }
             if (timer.getHungryCounter() != 0) {
-                timers.get(id).setAverageHungryTime(new Double((timer.getHungryTime() / timer.getHungryCounter()) / 1000));
+                timers.get(id).setAverageHungryTime(new Double((double)(timer.getHungryTime() / timer.getHungryCounter()) / 1000));
             }
             if (timer.getThinkingCounter() != 0) {
-                timers.get(id).setAverageThinkingTime(new Double((timer.getThinkingTime() / timer.getThinkingCounter()) / 1000));
+                timers.get(id).setAverageThinkingTime(new Double((double)(timer.getThinkingTime() / timer.getThinkingCounter()) / 1000));
             }
         }
         Platform.runLater(() -> loggingConsole.appendText(name + " stopped \n"));
