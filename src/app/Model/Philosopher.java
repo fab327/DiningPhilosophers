@@ -151,4 +151,5 @@ public class Philosopher implements Runnable {
     public String toString() {
         return "Philosopher_" + id + "_" + name;
     }
+
 }
