@@ -9,10 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,7 +19,8 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
-    public static boolean running;
+    public static boolean RUNNING;
+    public static boolean ALLOW_DEADLOCK;
 
     @FXML
     private ComboBox<Integer> thinkingTimeSelector;
@@ -30,6 +28,9 @@ public class Controller implements Initializable {
     private ComboBox<Integer> hungryTimeSelector;
     @FXML
     private ComboBox<Integer> eatingTimeSelector;
+
+    @FXML
+    private CheckBox allowDeadlockCheckbox;
 
     @FXML
     private TextArea logTextArea;
@@ -71,7 +72,7 @@ public class Controller implements Initializable {
     private Chopstick[] chopsticks = new Chopstick[5];
 
     //List with average execution times
-    ObservableList<Timer> timers = FXCollections.observableArrayList();
+    private ObservableList<Timer> timers = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -105,16 +106,16 @@ public class Controller implements Initializable {
         assignChopstickToItsView();
 
         //create columns for averages
-        TableColumn<Timer, String> philosopherColumn = new TableColumn<Timer, String>("Philosopher");
+        TableColumn<Timer, String> philosopherColumn = new TableColumn<>("Philosopher");
         philosopherColumn.setCellValueFactory(new PropertyValueFactory("philosopherName"));
 
-        TableColumn<Timer, Double> avgThinkingColumn = new TableColumn<Timer, Double>("Avg. Thinking");
+        TableColumn<Timer, Double> avgThinkingColumn = new TableColumn<>("Avg. Thinking");
         avgThinkingColumn.setCellValueFactory(new PropertyValueFactory("averageThinkingTime"));
 
-        TableColumn<Timer, Double> avgEatingColumn = new TableColumn<Timer, Double>("Avg. Eating");
+        TableColumn<Timer, Double> avgEatingColumn = new TableColumn<>("Avg. Eating");
         avgEatingColumn.setCellValueFactory(new PropertyValueFactory("averageEatingTime"));
 
-        TableColumn<Timer, Double> avgHungerColumn = new TableColumn<Timer, Double>("Avg. Hungry");
+        TableColumn<Timer, Double> avgHungerColumn = new TableColumn<>("Avg. Hungry");
         avgHungerColumn.setCellValueFactory(new PropertyValueFactory("averageHungryTime"));
 
         tableAvgs.getColumns().setAll(philosopherColumn, avgThinkingColumn, avgEatingColumn, avgHungerColumn);
@@ -146,7 +147,10 @@ public class Controller implements Initializable {
     public void startAction(ActionEvent actionEvent) {
         System.out.println("Started Simulation");
         logTextArea.appendText("Started Simulation \n");
-        running = true;
+        RUNNING = true;
+        if (allowDeadlockCheckbox.isSelected()) {
+            ALLOW_DEADLOCK = true;
+        }
 
         overrideDefaultValuesWhereNecessary();
 
@@ -158,7 +162,7 @@ public class Controller implements Initializable {
     public void stopAction(ActionEvent actionEvent) {
         System.out.println("Stopped Simulation");
         logTextArea.appendText("Stopped Simulation, wait for each philosopher to finish \n");
-        running = false;
+        RUNNING = false;
     }
 
     private void assignChopstickToItsView() {

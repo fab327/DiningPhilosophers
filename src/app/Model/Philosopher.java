@@ -51,19 +51,22 @@ public class Philosopher implements Runnable {
 
     @Override
     public void run() {
-        while (Controller.running) {
+        while (Controller.RUNNING) {
             think();
             hungryWaitingToEat();
-            eat();
+            if (Controller.ALLOW_DEADLOCK)
+                eatWithDeadlock();
+            else
+                eat();
 
             if (timer.getEatingCounter() != 0) {
-                timers.get(id).setAverageEatingTime(new Double((double)timer.getEatingTime() / timer.getEatingCounter()) / 1000);
+                timers.get(id).setAverageEatingTime((double) timer.getEatingTime() / timer.getEatingCounter() / 1000);
             }
             if (timer.getHungryCounter() != 0) {
-                timers.get(id).setAverageHungryTime(new Double((double)(timer.getHungryTime() / timer.getHungryCounter()) / 1000));
+                timers.get(id).setAverageHungryTime((double) (timer.getHungryTime() / timer.getHungryCounter()) / 1000);
             }
             if (timer.getThinkingCounter() != 0) {
-                timers.get(id).setAverageThinkingTime(new Double((double)(timer.getThinkingTime() / timer.getThinkingCounter()) / 1000));
+                timers.get(id).setAverageThinkingTime((double) (timer.getThinkingTime() / timer.getThinkingCounter()) / 1000);
             }
         }
         Platform.runLater(() -> loggingConsole.appendText(name + " stopped \n"));
@@ -77,7 +80,7 @@ public class Philosopher implements Runnable {
                 System.out.println(name + " is thinking...");
                 Platform.runLater(() -> {
                     loggingConsole.appendText(name + " is thinking... \n");
-                    headView.setImage(thinkingImg);
+//                    headView.setImage(thinkingImg);
                 });
 
                 Thread.sleep(Utils.randomIntThink());
@@ -110,7 +113,6 @@ public class Philosopher implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 
     private void eat() {
@@ -133,8 +135,10 @@ public class Philosopher implements Runnable {
 
                         timer.addEatingTime(System.currentTimeMillis() - startTime);
                         timer.setEatingCounter(timer.getEatingCounter() + 1);
+
                         //Go back to Thinking state
                         state = State.THINKING;
+                        Platform.runLater(() -> headView.setImage(thinkingImg));
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } finally {
@@ -143,6 +147,38 @@ public class Philosopher implements Runnable {
                 }
             } finally {
                 leftChopstick.drop(this);
+            }
+        }
+    }
+
+    private void eatWithDeadlock() {
+        if (leftChopstick.pick(this))         //left chopstick is available
+        {
+            if (rightChopstick.pick(this)) { //right chopstick is available
+                try {
+                    //Eat
+                    System.out.println(name + " is eating...");
+                    long startTime = System.currentTimeMillis();
+                    state = State.EATING;
+
+                    Platform.runLater(() -> {
+                        loggingConsole.appendText(name + " is eating... \n");
+                        headView.setImage(eatingImg);
+                    });
+
+                    Thread.sleep(Utils.randomIntEat());
+
+                    timer.addEatingTime(System.currentTimeMillis() - startTime);
+                    timer.setEatingCounter(timer.getEatingCounter() + 1);
+
+                    //Go back to Thinking state
+                    rightChopstick.drop(this);
+                    leftChopstick.drop(this);
+                    state = State.THINKING;
+                    Platform.runLater(() -> headView.setImage(thinkingImg));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
