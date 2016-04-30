@@ -43,8 +43,8 @@ public class Controller implements Initializable {
     private ImageView aristotle;
     private Image[] aristotleImgs = new Image[3];
     @FXML
-    private ImageView buddha;
-    private Image[] buddhaImgs = new Image[3];
+    private ImageView descartes;
+    private Image[] descartesImgs = new Image[3];
     @FXML
     private ImageView russell;
     private Image[] russellImgs = new Image[3];
@@ -84,9 +84,9 @@ public class Controller implements Initializable {
         aristotleImgs[1] = new Image(getClass().getResourceAsStream("img/Aristotle-Hungry.png"));
         aristotleImgs[2] = new Image(getClass().getResourceAsStream("img/Aristotle-Eating.png"));
 
-        buddhaImgs[0] = new Image(getClass().getResourceAsStream("img/Buddha-Thinking.png"));
-        buddhaImgs[1] = new Image(getClass().getResourceAsStream("img/Buddha-Hungry.png"));
-        buddhaImgs[2] = new Image(getClass().getResourceAsStream("img/Buddha-Eating.png"));
+        descartesImgs[0] = new Image(getClass().getResourceAsStream("img/Descartes-Thinking.png"));
+        descartesImgs[1] = new Image(getClass().getResourceAsStream("img/Descartes-Hungry.png"));
+        descartesImgs[2] = new Image(getClass().getResourceAsStream("img/Descartes-Eating.png"));
 
         russellImgs[0] = new Image(getClass().getResourceAsStream("img/Russell-Thinking.png"));
         russellImgs[1] = new Image(getClass().getResourceAsStream("img/Russell-Hungry.png"));
@@ -122,14 +122,14 @@ public class Controller implements Initializable {
         tableAvgs.setItems(timers);
 
         timers.add(0, new Timer("Aristotle"));
-        timers.add(1, new Timer("Buddha"));
+        timers.add(1, new Timer("Descartes"));
         timers.add(2, new Timer("Russel"));
         timers.add(3, new Timer("Marx"));
         timers.add(4, new Timer("Kant"));
 
         //Create philosophers
         philosophers[0] = new Philosopher(chopsticks[0], chopsticks[1], 0, "aristotle", aristotle, aristotleImgs[0], aristotleImgs[1], aristotleImgs[2], logTextArea, new Timer(), timers);
-        philosophers[1] = new Philosopher(chopsticks[1], chopsticks[2], 1, "buddha", buddha, buddhaImgs[0], buddhaImgs[1], buddhaImgs[2], logTextArea, new Timer(), timers);
+        philosophers[1] = new Philosopher(chopsticks[1], chopsticks[2], 1, "descartes", descartes, descartesImgs[0], descartesImgs[1], descartesImgs[2], logTextArea, new Timer(), timers);
         philosophers[2] = new Philosopher(chopsticks[2], chopsticks[3], 2, "russel", russell, russellImgs[0], russellImgs[1], russellImgs[2], logTextArea, new Timer(), timers);
         philosophers[3] = new Philosopher(chopsticks[3], chopsticks[4], 3, "marx", marx, marxImgs[0], marxImgs[1], marxImgs[2], logTextArea, new Timer(), timers);
         philosophers[4] = new Philosopher(chopsticks[4], chopsticks[0], 4, "kant", kant, kantImgs[0], kantImgs[1], kantImgs[2], logTextArea, new Timer(), timers);

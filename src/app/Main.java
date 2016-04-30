@@ -14,7 +14,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("View/view.fxml"));
 
         primaryStage.setTitle("Dining Philosophers");
-        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("img/Table_with_Forks.png")));
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("img/Table.png")));
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
