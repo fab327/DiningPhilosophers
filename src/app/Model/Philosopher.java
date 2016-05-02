@@ -115,6 +115,38 @@ public class Philosopher implements Runnable {
         }
     }
 
+    private void eatWithDeadlock() {
+        if (leftChopstick.pick(this))         //left chopstick is available
+        {
+            if (rightChopstick.pick(this)) {
+                try {
+                    //Eat
+                    System.out.println(name + " is eating...");
+                    long startTime = System.currentTimeMillis();
+                    state = State.EATING;
+
+                    Platform.runLater(() -> {
+                        loggingConsole.appendText(name + " is eating... \n");
+                        headView.setImage(eatingImg);
+                    });
+
+                    Thread.sleep(Utils.randomIntEat());
+
+                    timer.addEatingTime(System.currentTimeMillis() - startTime);
+                    timer.setEatingCounter(timer.getEatingCounter() + 1);
+
+                    //Go back to Thinking state
+                    rightChopstick.drop(this);
+                    leftChopstick.drop(this);
+                    state = State.THINKING;
+                    Platform.runLater(() -> headView.setImage(thinkingImg));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     private void eat() {
         if (leftChopstick.pick(this))            //left chopstick is available
         {
@@ -147,38 +179,6 @@ public class Philosopher implements Runnable {
                 }
             } finally {
                 leftChopstick.drop(this);
-            }
-        }
-    }
-
-    private void eatWithDeadlock() {
-        if (leftChopstick.pick(this))         //left chopstick is available
-        {
-            if (rightChopstick.pick(this)) { //right chopstick is available
-                try {
-                    //Eat
-                    System.out.println(name + " is eating...");
-                    long startTime = System.currentTimeMillis();
-                    state = State.EATING;
-
-                    Platform.runLater(() -> {
-                        loggingConsole.appendText(name + " is eating... \n");
-                        headView.setImage(eatingImg);
-                    });
-
-                    Thread.sleep(Utils.randomIntEat());
-
-                    timer.addEatingTime(System.currentTimeMillis() - startTime);
-                    timer.setEatingCounter(timer.getEatingCounter() + 1);
-
-                    //Go back to Thinking state
-                    rightChopstick.drop(this);
-                    leftChopstick.drop(this);
-                    state = State.THINKING;
-                    Platform.runLater(() -> headView.setImage(thinkingImg));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }
