@@ -31,6 +31,8 @@ public class Philosopher implements Runnable {
     private Timer timer;
     private ObservableList<Timer> timers;
 
+    private boolean consecHungry = false;
+
     public Philosopher(Chopstick leftChopstick, Chopstick rightChopstick, int id, String name, ImageView headView,
                        Image thinkingImg, Image hungryImg, Image eatingImg, TextArea loggingConsole, Timer timer, ObservableList<Timer> timers) {
         this.leftChopstick = leftChopstick;
@@ -59,6 +61,12 @@ public class Philosopher implements Runnable {
             else
                 eat();
 
+            //Deadlock Average Hungry fix: if philosopher failed to eat and is still hungry
+            if (state == State.HUNGRY) {
+                //indicates that the philosopher is still hungry, therefore we do not need to increment hungryCounter
+                consecHungry = true;
+            }
+
             if (timer.getEatingCounter() != 0) {
                 timers.get(id).setAverageEatingTime((double) timer.getEatingTime() / timer.getEatingCounter() / 1000);
             }
@@ -85,10 +93,11 @@ public class Philosopher implements Runnable {
 
                 Thread.sleep(Utils.randomIntThink());
                 state = State.HUNGRY;
+
+                timer.addThinkingTime(System.currentTimeMillis() - startTime);
+                timer.setThinkingCounter(timer.getThinkingCounter() + 1);
             }
 
-            timer.addThinkingTime(System.currentTimeMillis() - startTime);
-            timer.setThinkingCounter(timer.getThinkingCounter() + 1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -106,10 +115,16 @@ public class Philosopher implements Runnable {
                 });
 
                 Thread.sleep(Utils.randomIntHungry());
+
+                if (!consecHungry) {
+                    timer.setHungryCounter(timer.getHungryCounter() + 1);
+                }
+
+                consecHungry = false;
+
+                timer.addHungryTime(System.currentTimeMillis() - startTime);
             }
 
-            timer.setHungryCounter(timer.getHungryCounter() + 1);
-            timer.addHungryTime(System.currentTimeMillis() - startTime);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
